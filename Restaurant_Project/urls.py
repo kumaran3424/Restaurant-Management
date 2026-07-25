@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from app.models mport*
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home',home)
 ]
