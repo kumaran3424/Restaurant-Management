@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ item.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="detail-card">
+    <h1 class="page-title">{{ item.name }}</h1>
+    <h2 class="price-tag">₹{{ item.price }}</h2>
+
+    <!-- Metadata Section: Chef & Category -->
+    <div class="item-meta" style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        {% if item.chef %}
+            <span class="meta-badge chef-badge" style="background: #f1f5f9; color: #334155; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                👨‍🍳 Prepared by Chef {{ item.chef.name|default:item.chef }}
+            </span>
+        {% endif %}
+
+        {% if item.category %}
+            <span class="meta-badge category-badge" style="background: #eff6ff; color: #2563eb; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                📁 {{ item.category.name|default:item.category }}
+            </span>
+        {% endif %}
+    </div>
+    
+    <p style="margin-bottom: 12px;">
+        {{ item.description|default:"No detailed description available for this dish." }}
+    </p>
+
+    <!-- Availability Status -->
+    <p>
+        {% if item.is_available %}
+            <span style="color: #16a34a; font-weight: 600;">In Stock & Ready to Order</span>
+        {% else %}
+            <span style="color: #dc2626; font-weight: 600;">Not available right now</span>
+        {% endif %}
+    </p>
+
+    <hr style="border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 20px 0;">
+
+    <!-- Order Selection Form -->
+    <form id="orderForm" onsubmit="showOrderPopup(event)">
+        <!-- 1. Select Table & Capacity from Database -->
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label for="tableSelect" style="display: block; font-weight: 600; margin-bottom: 6px;">Select Table:</label>
+            <select id="tableSelect" required {% if not item.is_available %}disabled{% endif %} style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                <option value="" disabled selected>-- Choose Table --</option>
+                {% for table in available_tables %}
+                    <option value="Table {{ table.table_number }} (Capacity: {{ table.capacity }} people)">
+                        Table {{ table.table_number }} — Capacity: {{ table.capacity }} seats
+                    </option>
+                {% empty %}
+                    <option value="" disabled>No tables available</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- 2. Select Quantity -->
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label for="quantityInput" style="display: block; font-weight: 600; margin-bottom: 6px;">Quantity:</label>
+            <input type="number" id="quantityInput" min="1" max="20" value="1" required {% if not item.is_available %}disabled{% endif %} style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
+        </div>
+
+        <!-- Place Order Button -->
+        <button type="submit" {% if not item.is_available %}disabled{% endif %} class="btn-submit" style="width: 100%; padding: 12px; background: #0f172a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px;">
+            🛒 Place Order
+        </button>
+    </form>
+
+    <a href="{% url 'menu_list' %}" class="nav-link" style="display: inline-block; margin-top: 25px; text-decoration: none; color: #2563eb;">← Back to Menu</a>
+</div>
+
+<!-- JavaScript to Trigger Popup -->
+<script>
+function showOrderPopup(event) {
+    event.preventDefault();
+
+    const itemName = "{{ item.name }}";
+    const unitPrice = parseFloat("{{ item.price }}");
+    
+    const tableSelect = document.getElementById('tableSelect');
+    const selectedTableText = tableSelect.options[tableSelect.selectedIndex].text;
+    
+    const quantity = parseInt(document.getElementById('quantityInput').value);
+    const totalPrice = (unitPrice * quantity).toFixed(2);
+
+    alert(
+        "🎉 Order Placed Successfully!\n\n" +
+        "• Item: " + itemName + "\n" +
+        "• Quantity: " + quantity + "\n" +
+        "• Selected: " + selectedTableText + "\n" +
+        "• Total Price: $" + totalPrice
+    );
+}
+</script>
+{% endblock %}

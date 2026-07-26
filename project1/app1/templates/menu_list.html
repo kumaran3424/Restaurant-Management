@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Menu - Gourmet Bistro{% endblock %}
+
+{% block content %}
+<h2 class="page-title">Full Restaurant Menu</h2>
+
+<div class="grid-cards">
+    {% for item in menu_items %}
+    <div class="menu-card">
+        <div>
+            <!-- Category Badge (displays nothing if no category) -->
+            {% if item.category %}
+                <span class="menu-category-badge" style="display: inline-block; font-size: 11px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 12px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    📁 {{ item.category.name|default:item.category }}
+                </span>
+            {% endif %}
+
+            <h3 class="menu-card-title">{{ item.name }}</h3>
+            <div class="price-tag">₹{{ item.price }}</div>
+            <p style="color: var(--text-muted); font-size: 14px;">
+                {{ item.description|default:"No description provided."|truncatewords:10 }}
+            </p>
+        </div>
+
+        <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <small>
+                {% if item.is_available %}
+                    <span style="color: var(--success); font-weight: bold;">Available</span>
+                {% else %}
+                    <span style="color: var(--accent); font-weight: bold;">Sold Out</span>
+                {% endif %}
+            </small>
+
+            <form action="{% url 'menu_details' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <button type="submit" class="btn-view">View</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p>No menu items available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

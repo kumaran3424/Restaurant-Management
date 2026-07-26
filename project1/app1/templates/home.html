@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2 class="page-title">Featured & Recent Items</h2>
+
+{% if recent_items %}
+    <div class="grid-cards">
+        {% for item in recent_items %}
+        <div class="featured-card">
+            
+            <!-- Card Content Body -->
+            <div class="card-body">
+                <div>
+                    <span class="badge-recent">✨ Recently Added</span>
+                </div>
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description|default:"No description available."|truncatewords:15 }}</p>
+                <div class="price-tag">₹{{ item.price }}</div>
+            </div>
+
+            <!-- Bottom Action Button -->
+            <form action="{% url 'menu_details' %}" method="POST" class="card-action"> 
+                {% csrf_token %}
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <button type="submit" class="btn-view">View Details</button>
+            </form>
+
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No featured items available right now.</p>
+{% endif %}
+{% endblock %}

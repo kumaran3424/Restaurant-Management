@@ -1,0 +1,14 @@
+# Ignore virtual environment folders and files
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+
+# Ignore Django temporary files and local database
+*.pyc
+__pycache__/
+db.sqlite3
+media/
+
+# Ignore IDE settings
+.vscode/

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories - Gourmet Bistro{% endblock %}
+
+{% block content %}
+<h2 class="page-title">Menu Categories</h2>
+
+<div class="category-pills">
+    {% for category in categories %}
+    <div class="category-pill">
+        🏷️ <a href="">{{ category.name }}</a>
+    </div>
+    {% empty %}
+    <p>No categories defined.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Scoped wrapper class -->
+<div class="add-item-card">
+    <h2 class="page-title">Add Chef</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ key.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

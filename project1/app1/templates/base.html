@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gourmet Bistro{% endblock %}</title>
+
+    <!-- External Stylesheet -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header>
+        <div class="header-left">
+            <a href="{% url 'home' %}" class="logo">🍴 Los Pollos Hermanous</a>
+            <nav class="main-nav">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'menu_list' %}" class="nav-link">Menu</a>
+                <a href="{% url 'chef_list' %}" class="nav-link">Chefs</a>
+                <a href="{% url 'category-list' %}" class="nav-link">Categories</a>
+            </nav>
+        </div>
+        <div class="nav-actions">
+            <a href="{% url 'add-menu' %}" class="btn-nav">+ Add Item</a>
+            <a href="{% url 'chef_add' %}" class="btn-nav">+ Add Chef</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="color: var(--accent);">🍴 Los Pollos Hermanous</h3>
+                <p style="font-size: 14px; opacity: 0.8; max-width: 300px;">
+                    Experience fine dining prepared by world-class chefs.
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Menu</a></li>
+                    <li><a href="">Chefs</a></li>
+                    <li><a href="">Categories</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Opening Hours</h4>
+                <p style="font-size: 14px; opacity: 0.8;">Mon - Fri: 11:00 AM - 10:00 PM</p>
+                <p style="font-size: 14px; opacity: 0.8;">Sat - Sun: 10:00 AM - 11:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; Los Pollos Hermanous. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
