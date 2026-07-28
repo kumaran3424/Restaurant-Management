@@ -54,13 +54,13 @@ def add_new_chef(req):
     else:
         return render(req,'add_chef.html',{'key':obj})
 
-def trackorder(req):
+# def trackorder(req):
 
-    if req.method == 'POST':
-        obj1 = trackItems()
-        track = req.POST.get()
-        data = track.objects.all()
-        return render(req,'track.html' , {'dt' : obj1,'data' : data})
+#     if req.method == 'POST':
+#         obj1 = trackItems()
+#         track = req.POST.get()
+#         data = track.objects.all()
+#         return render(req,'track.html' , {'dt' : obj1,'data' : data})
 
 def maps(req):
-    pass
+    return render(req,'maps.html')
