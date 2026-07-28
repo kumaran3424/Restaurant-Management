@@ -1,0 +1,1 @@
+HEllo everyone newly created for my django project!
