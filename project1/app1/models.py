@@ -24,7 +24,7 @@ class menuitem(models.Model):
 class dinning_table(models.Model):
     table_number=models.IntegerField(unique=True)
     capacity=models.IntegerField(default=2)
-    orderID = models.IntegerField(default=0)
+    
 from django import forms
 class add_menuitem(forms.ModelForm):
     class Meta:
