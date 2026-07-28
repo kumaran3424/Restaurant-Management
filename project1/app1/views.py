@@ -17,7 +17,12 @@ def menu_details(req):
     if req.method=='POST':
         d=req.POST.get('item_id')
         c=menuitem.objects.get(id=d)
+        import random
+        # oid = random.randint(100000,999999)
+        # # orderID = dinning_table.objects.create(orderID = oid)
+        # dinning_table.objects.create(orderId = oid)
         table_=dinning_table.objects.all()
+        
         return render(req,'menu_details.html',{'item':c,'available_tables':table_})
     else:
         return render(req,'menu_list.html',{'menu_items':menuitem.objects.all()})
@@ -48,3 +53,14 @@ def add_new_chef(req):
         
     else:
         return render(req,'add_chef.html',{'key':obj})
+
+def trackorder(req):
+
+    if req.method == 'POST':
+        obj1 = trackItems()
+        track = req.POST.get()
+        data = track.objects.all()
+        return render(req,'track.html' , {'dt' : obj1,'data' : data})
+
+def maps(req):
+    pass

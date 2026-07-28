@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +7,11 @@
     <title>{% block title %}Gourmet Bistro{% endblock %}</title>
 
     <!-- External Stylesheet -->
-    {% load static %}
+    {% block extra_css %}
+    
     <link rel="stylesheet" href="{% static 'home.css' %}">
 
-    {% block extra_css %}{% endblock %}
+    {% endblock %}
 </head>
 <body>
 
@@ -22,9 +24,11 @@
                 <a href="{% url 'menu_list' %}" class="nav-link">Menu</a>
                 <a href="{% url 'chef_list' %}" class="nav-link">Chefs</a>
                 <a href="{% url 'category-list' %}" class="nav-link">Categories</a>
+                <a href="{% url 'directions' %}" class="nav-link">Directions</a>
             </nav>
         </div>
         <div class="nav-actions">
+            <a href="" class="btn-nav">Track Order</a>
             <a href="{% url 'add-menu' %}" class="btn-nav">+ Add Item</a>
             <a href="{% url 'chef_add' %}" class="btn-nav">+ Add Chef</a>
         </div>

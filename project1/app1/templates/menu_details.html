@@ -39,7 +39,7 @@
     <hr style="border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 20px 0;">
 
     <!-- Order Selection Form -->
-    <form id="orderForm" onsubmit="showOrderPopup(event)">
+    <form id="orderForm">
         <!-- 1. Select Table & Capacity from Database -->
         <div class="form-group" style="margin-bottom: 16px;">
             <label for="tableSelect" style="display: block; font-weight: 600; margin-bottom: 6px;">Select Table:</label>
@@ -62,9 +62,10 @@
         </div>
 
         <!-- Place Order Button -->
-        <button type="submit" {% if not item.is_available %}disabled{% endif %} class="btn-submit" style="width: 100%; padding: 12px; background: #0f172a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px;">
+        <a href=""><button type="reset" {% if not item.is_available %}disabled{% endif %} class="btn-submit" style="width: 100%; padding: 12px; background: #0f172a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px;" onclick="popup()">
             🛒 Place Order
         </button>
+        </a>
     </form>
 
     <a href="{% url 'menu_list' %}" class="nav-link" style="display: inline-block; margin-top: 25px; text-decoration: none; color: #2563eb;">← Back to Menu</a>
@@ -72,25 +73,75 @@
 
 <!-- JavaScript to Trigger Popup -->
 <script>
-function showOrderPopup(event) {
-    event.preventDefault();
+// function showOrderPopup(event) {
+//     event.preventDefault();
 
-    const itemName = "{{ item.name }}";
-    const unitPrice = parseFloat("{{ item.price }}");
+//     const itemName = "{{ item.name }}";
+//     const unitPrice = parseFloat("{{ item.price }}");
     
-    const tableSelect = document.getElementById('tableSelect');
-    const selectedTableText = tableSelect.options[tableSelect.selectedIndex].text;
+//     const tableSelect = document.getElementById('tableSelect');
+//     const selectedTableText = tableSelect.options[tableSelect.selectedIndex].text;
     
-    const quantity = parseInt(document.getElementById('quantityInput').value);
-    const totalPrice = (unitPrice * quantity).toFixed(2);
+//     const quantity = parseInt(document.getElementById('quantityInput').value);
+//     const totalPrice = (unitPrice * quantity).toFixed(2);
 
-    alert(
-        "🎉 Order Placed Successfully!\n\n" +
-        "• Item: " + itemName + "\n" +
-        "• Quantity: " + quantity + "\n" +
-        "• Selected: " + selectedTableText + "\n" +
-        "• Total Price: $" + totalPrice
-    );
+//     alert(
+//         "🎉 Order Placed Successfully!\n\n" +
+//         "• Item: " + itemName + "\n" +
+//         "• Quantity: " + quantity + "\n" +
+//         "• Selected: " + selectedTableText + "\n" +
+//         "• Total Price: $" + totalPrice
+//     );
+// }
+
+let btn = document.querySelector('.btn-submit');
+
+function popup(){
+let tableSelect = document.getElementById('tableSelect');
+let selectedTableText = tableSelect.options[tableSelect.selectedIndex].text;
+if (tableSelect.value != ""){
+    const itemname = '{{ item.name }}';
+    
+    const unitprice = '{{ item.price }}';
+
+   
+    
+    let pop = document.createElement('div');
+    pop.setAttribute('class' , 'orderpop')
+    
+    let orderId = Math.floor(Math.random() * 1000000);
+    
+    let quan = document.getElementById('quantityInput');
+    
+    const disquan = quan.value;
+
+    const bd = document.querySelector('.detail-card')
+
+    bd.style.opacity = 0.3;
+    
+    pop.innerHTML = `<div class = 'inerdiv'>
+            <div>
+            <h1 style = "display : flex; align-item:center ; justify-content : center">RECEIPT</h1>
+            <p>................................................................................................................</p>
+            <h2 style = "display : flex; align-item:center ; justify-content : center">Ordered items</h2>
+            <p style = "display : flex; align-item:center ; justify-content : center">..............................................</p>
+            <h4 style = "display : flex; align-item:center ; justify-content : center"><span style = "font-weight : 400"> Item : </span>${itemname}</h4>
+            <p style = "display : flex; align-item:center ; justify-content : center"> Quantity : ${disquan}</p>
+            <p style = "display : flex; align-item:center ; justify-content : center">..............................................</p>
+            <h4 style = "display : flex; align-item:center ; justify-content : center"> <span style = "font-weight : 400">Order Id : </span>${orderId}</h4>
+            <a href = '{% url 'menu_list' %}' style = "display : flex; align-item:center ; justify-content : center"><button type = 'submit' class = "orderok">Return</button></a>
+            </div>
+        </div>`;
+
+        
+        document.body.appendChild(pop);
+    }
+    else{
+        alert(
+            'Select table first!'
+        );
+    }
 }
+
 </script>
 {% endblock %}

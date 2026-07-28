@@ -24,6 +24,7 @@ class menuitem(models.Model):
 class dinning_table(models.Model):
     table_number=models.IntegerField(unique=True)
     capacity=models.IntegerField(default=2)
+    orderID = models.IntegerField(default=0)
 from django import forms
 class add_menuitem(forms.ModelForm):
     class Meta:
@@ -34,3 +35,21 @@ class new_chef(forms.ModelForm):
     class Meta:
         model=chef
         fields=['name','specialization']
+
+class track(models.Model):
+
+    orderId = models.IntegerField()
+    Item = models.TextField()
+    time = models.TimeField(auto_created=True)
+
+class trackItems(forms.ModelForm):
+    class Meta:
+        model = track
+        fields = ['orderId']
+
+        widgets = {
+            'orderId' : forms.TextInput(attrs={
+                'class' : 'orderinput',
+                'placeholder' : 'Enter orderid'
+            })
+        }

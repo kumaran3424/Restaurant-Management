@@ -3,15 +3,23 @@
 {% block title %}Menu - Gourmet Bistro{% endblock %}
 
 {% block content %}
+<div style="display: flex; gap: 20px;" class="menulinav">
 <h2 class="page-title">Full Restaurant Menu</h2>
-
+<button type="button" class="vg">VEG</button>
+<button type="button" class="novg">NON-VEG</button>
+</div>
 <div class="grid-cards">
+    
     {% for item in menu_items %}
     <div class="menu-card">
         <div>
             <!-- Category Badge (displays nothing if no category) -->
-            {% if item.category %}
+            {% if item.category == 'VEG' %}
                 <span class="menu-category-badge" style="display: inline-block; font-size: 11px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 12px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    📁 {{ item.category.name|default:item.category }}
+                </span>
+            {% elif item.category == 'NON-VEG' %}
+            <span class="menu-category-badge" style="display: inline-block; font-size: 11px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 12px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
                     📁 {{ item.category.name|default:item.category }}
                 </span>
             {% endif %}
@@ -43,4 +51,56 @@
     <p>No menu items available.</p>
     {% endfor %}
 </div>
+
+<script>
+    // Grab the buttons safely
+    const vgBtn = document.querySelector('.vg');
+    const nonvgBtn = document.querySelector('.novg');
+
+    // A list of common non-veg keywords to check if the database badges are completely empty/missing
+    const nonVegKeywords = ['CHICKEN', 'MUTTON', 'EGG', 'FISH', 'PRAWN', 'PORK', 'BEEF', 'MEAT', 'TIKKA', 'KEBAB'];
+
+    function isNonVegCard(card) {
+        // 1. First check if a badge actually exists (in case Django works)
+        const badge = card.querySelector('.menu-category-badge');
+        if (badge) {
+            const txt = badge.textContent.toUpperCase();
+            if (txt.includes('NON-VEG') || txt.includes('2')) return true;
+            if (txt.includes('VEG') || txt.includes('1')) return false;
+        }
+
+        // 2. Fallback: If badges are missing because of the 1 vs 2 mismatch, look at the item Title and Description text!
+        const title = card.querySelector('.menu-card-title')?.textContent.toUpperCase() || '';
+        const desc = card.querySelector('p')?.textContent.toUpperCase() || '';
+        
+        return nonVegKeywords.some(keyword => title.includes(keyword) || desc.includes(keyword));
+    }
+
+    function sortvg() {
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach(card => {
+            if (isNonVegCard(card)) {
+                card.style.display = 'none'; // Hide non-veg
+            } else {
+                card.style.display = 'block'; // Show veg
+            }
+        });
+    }
+
+    function sortnonvg() {
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach(card => {
+            if (!isNonVegCard(card)) {
+                card.style.display = 'none'; // Hide veg
+            } else {
+                card.style.display = 'block'; // Show non-veg
+            }
+        });
+    }
+
+    // Explicitly attach click listeners
+    if (vgBtn) vgBtn.addEventListener('click', sortvg);
+    if (nonvgBtn) nonvgBtn.addEventListener('click', sortnonvg);
+</script>
+
 {% endblock %}

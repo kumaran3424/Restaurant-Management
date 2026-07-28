@@ -26,5 +26,6 @@ urlpatterns = [
     path('chef-list',chef_list,name='chef_list'),
     path('add-menu-item',add_menu_item,name='add-menu'),
     path('add-chef',add_new_chef,name='chef_add'),
+    path('directions' , maps,name="directions")
     
 ]

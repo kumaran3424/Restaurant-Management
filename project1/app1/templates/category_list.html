@@ -8,7 +8,7 @@
 <div class="category-pills">
     {% for category in categories %}
     <div class="category-pill">
-        🏷️ <a href="">{{ category.name }}</a>
+        🏷️ <a href="{% url 'menu_list' %}">{{ category.name }}</a>
     </div>
     {% empty %}
     <p>No categories defined.</p>
